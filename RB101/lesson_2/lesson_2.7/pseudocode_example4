@@ -1,0 +1,22 @@
+Example 4: a method that determines the index of the 3rd occurrence of a given character in a string. For instance, if the given character is 'x' and the string is 'axbxcdxex', the method should return 6 (the index of the 3rd 'x'). If the given character does not occur at least 3 times, return nil.
+
+# Informal Pseudo-Code
+
+Create a new variable named counter and set it equal to 0.
+Create another variable named character, and get input from the user as to which character they would like to find the 3rd occurrence of in a given string. 
+Iterate through a string and increment counter by 1 for each occurrence that 'character' is found in the string. 
+If counter is 3, return the index of the 3rd occurrence of the given character in the string.
+Return nil if the given character doesn't occur at least 3 times in the string. 
+
+# Formal Pseudo-Code
+
+START 
+# Given a string of characters "string_input"
+
+SET counter = 0
+SET array_of_characters 
+
+WHILe
+For every occurrence of 'character' in the given string, counter = counter + 1
+
+END

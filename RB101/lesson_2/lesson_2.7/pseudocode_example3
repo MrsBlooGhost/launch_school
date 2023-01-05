@@ -1,0 +1,22 @@
+Example 3: a method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element. For instance:
+every_other([1,4,7,2,5]) # => [1,7,5]
+
+# Informal Pseudo-Code
+
+Iterate through each element of an array.
+Return the value of the element for arrays at space 0 and even spaces only. 
+Print the return value. 
+
+# Formal Pseudo-Code
+
+START
+
+SET new_array = empty array
+
+iterator = 0
+
+WHILE iterator < length of the array
+  RETURN array at space "iterator"
+  iterator = iterator + 1
+
+END
