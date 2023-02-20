@@ -1,0 +1,34 @@
+Example 3: a method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element. For instance:
+every_other([1,4,7,2,5]) # => [1,7,5]
+
+# Informal Pseudo-Code
+
+Given an array of integers. 
+
+Create a new array called even_integers.
+
+Iterate through the given array one by one.
+- Append the value of the elements at space 0 and even spaces to even_integers. 
+
+After iterating through the given array, return the new array even_integers.
+
+# Formal Pseudo-Code
+
+START
+
+# Given an array of integers
+
+SET even_integers = empty array
+
+iterator = 0
+
+WHILE length of the array > 0
+  IF iterator is 0 or even  
+    Append element of the given array at space "iterator" to even_integers
+    iterator = iterator + 1
+  ELSE
+    iterator = iterator + 1
+
+PRINT even_integers
+
+END

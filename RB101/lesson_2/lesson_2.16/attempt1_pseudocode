@@ -1,0 +1,49 @@
+# Informal Pseudo-Code
+1. Ask user for the loan amount and assign value to variable loan_amount.
+   - Validate that the loan amount is a positive integer or a float.
+2. Ask user for the annual percentage rate and assign value to variable annual_rate.
+   - Validate that the user has entered an positive integer or a float.
+   - Convert annual_rate to a monthly rate and then a percentage by dividing by 1200.
+   - Assign this value to the variable monthly_rate.
+3. Ask user for the the loan duration in years and assign value to loan_years.
+   - Validate that the user has entered a positive integer or a float.
+   - Convert the loan duration in years to loan duration in months by dividing by 12. Assign this value to loan_months.
+4. Enter the provided formula and assign it to the variable monthly_payment.
+   - Ensure that the monthly_payment is rounded to the nearest tenth digit. 
+   - Output the value of monthly_payment to the user.
+
+# Formal Pseudo-Code
+START
+
+CREATE method named valid_number? that accepts a parameter and checks that it is a positive integer or float.
+
+WHILE valid_number?(loan_amount) != true
+  PRINT "Enter the amount of your loan."
+  GET input from user
+  SET loan_amount = user input
+  IF valid_number(loan_amount)
+    break
+  ELSE
+    PRINT "Hm, that doesn't look like a valid number."
+
+WHILE valid_number?(annual_rate) != true
+  PRINT "Enter the annual percentage rate of your loan."
+  GET input from user
+  SET annual_rate = user input
+  IF valid_number(annual_rate)
+    SET monthly_rate = annual_rate / 1200
+
+WHILE valid_number?(loan_years) != true
+  PRINT "Enter the duration of your loan."
+  GET input from user
+  SET loan_duration = user input
+  IF valid_number(loan_years)
+    SET loan_months = loan_years * 12
+    break
+  ELSE
+    PRINT "Hm, that doesn't look like a valid number."
+
+SET monthly_payment = loan_amount * (monthly_rate / 1 - (1 + monthly_rate)**(-loan_months)))
+SET rounded_monthly_payment = monthly_payment rounded to nearest tenths digit
+
+END

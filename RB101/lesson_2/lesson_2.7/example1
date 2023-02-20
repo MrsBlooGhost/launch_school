@@ -1,0 +1,28 @@
+Example 1: a method that returns the sum of two integers 
+
+# Informal Pseudo-Code
+
+- Prompt the user to enter two integers.
+- Get input from user and validate that input is an integer. If so, assign it to a variable. Repeat. 
+- Add the two integers and assign the sum to a variable. 
+- Return the value of the sum.
+
+
+# Formal Psuedo-Code
+
+START
+
+PRINT "Enter the first integer you'd like to add."
+GET number from user
+Validate that input == integer
+SET number1 = input from user
+
+PRINT "Enter the second integer you'd like to add."
+GET number from user
+Validate that input == integer
+SET number2 = input from user
+
+SET sum = number1 + number2
+PRINT sum
+
+END

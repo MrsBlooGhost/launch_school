@@ -1,0 +1,32 @@
+Example 2: a method that takes an array of strings, and returns a string that is all those strings concatenated together
+
+# Informal Pseudo-Code
+
+Given an array of strings.
+
+Create an empty string and assign it to a variable. 
+Create a method that iterates through the array of strings one by one. 
+- For each interation, append each element of the array collection to the string variable.
+  
+Return the string output variable. 
+
+
+# Formal Pseudo-Code
+
+START
+
+# Given an array of strings
+
+SET string_output = nil
+
+SET iterator = 0
+
+IF size of array != iterator
+  append element of array at space "iterator" to string_output
+  iterator = iterator + 1
+ELSE
+  break 
+
+PRINT string_output
+
+END

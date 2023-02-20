@@ -1,0 +1,50 @@
+Example 4: a method that determines the index of the 3rd occurrence of a given character in a string. For instance, if the given character is 'x' and the string is 'axbxcdxex', the method should return 6 (the index of the 3rd 'x'). If the given character does not occur at least 3 times, return nil.
+
+# Informal Pseudo-Code
+
+Given a string and a specific character...
+
+Create a variable called string and assign it to the string given.
+Create a variable called character and assign it to the specific character given.
+
+Create a variable called iterator and assign it to 0.
+Create a variable called occurrence and assign it to 0.
+
+Iterate through the string character by character.
+- For each iteration, compare the value of the element at index "iterator" to the variable character.
+- If they are equal, increment the variable occurrence by 1.
+- Stop iterating when either the variable occurrence == 3 or the variable iterator == length of string.
+
+After iterating through the string, return the character is the value of occurrence is 3. Else return nil.
+
+
+# Formal Pseudo-Code
+
+START 
+
+# Given a string of characters "string_input" and a specific character "a" to find the third occurrence of
+
+PRINT "Enter the sentence or phrase in which you would like to find the index of the third occurrence of a specific character."
+GET string of characters from user
+SET string = user input 
+
+PRINT "What character would you like to find the index of the third occurrence of?"
+GET character from user
+SET character = user input
+
+SET iterator = 0
+SET occurrence = 0
+
+WHILE occurrence != 3 || iterator != length of string
+  IF value of the element at index "iterator" == character
+    occurrence = occurrence + 1
+    iterator = iterator + 1
+  ELSE
+    iterator = iterator + 1
+
+IF occurrence == 3
+  PRINT character
+ELSE 
+  PRINT nil
+
+END

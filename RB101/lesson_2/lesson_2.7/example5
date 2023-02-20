@@ -1,0 +1,41 @@
+a method that takes two arrays of numbers and returns the result of merging the arrays. The elements of the first array should become the elements at the even indexes of the returned array, while the elements of the second array should become the elements at the odd indexes. For instance: You may assume that both array arguments have the same number of elements.
+    merge([1, 2, 3], [4, 5, 6]) # => [1, 4, 2, 5, 3, 6]
+
+# Informal Pseudo-Code
+
+# Given two arrays of numbers
+
+Prompt the user to enter two arrays of the same number of elements to merge. Set each array to array1 and array 2, respectively. 
+Create a new empty array called merged_arrays.
+
+Create an incrementing iterator that starts at 0.
+
+Iterate through both arrays.
+- For each iteration, push the element at index "iterator" from array1 to the new array. Repeat for array2.
+- Stop iterating when iterator == size of array1
+
+PRINT the value of merged_arrays
+
+
+# Formal Pseudo-Code
+
+START 
+
+PRINT "Enter the first of two arrays that you would like to merge together, in an alternating fashion."
+SET array1 = user input
+
+PRINT "Enter the second of two arrays that you would like to merge together, in an alternating fashion."
+SET array2 = user input
+
+SET merged_arrays = []
+
+SET iterator = 0
+
+WHILE iterator != size of array1
+  PUSH array1["iterator"] to merged_arrays
+  PUSH array2["iterator"] to merged arrays
+  iterator = iterator + 1
+
+PRINT "The new merged array is: #{merged_arrays}."
+
+END

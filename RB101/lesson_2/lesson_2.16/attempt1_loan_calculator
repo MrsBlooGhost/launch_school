@@ -1,0 +1,82 @@
+require 'yaml'
+MESSAGES = YAML.load_file('attempt1_loancalc_messages.yml')
+
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
+
+def valid_number?(number)
+  number.to_f > 0
+end
+
+prompt(MESSAGES['welcome'])
+
+name = ''
+loop do
+  name = Kernel.gets().chomp()
+  if name.empty?()
+    prompt(MESSAGES['valid_name'])
+  else
+    break
+  end
+end
+
+prompt("Hello, #{name}!")
+
+loop do
+  loan_amount = ''
+  loop do
+    prompt(MESSAGES['loan_amount'])
+    loan_amount = gets.chomp.to_i
+    if valid_number?(loan_amount)
+      break
+    else
+      prompt(MESSAGES['invalid_loan_amount'])
+    end
+  end
+
+  prompt("Your loan amount is: $" + loan_amount.to_s)
+
+  annual_rate = ''
+  monthly_rate = ''
+  loop do
+    prompt(MESSAGES['annual_percentage_rate'])
+    annual_rate = gets.chomp
+    if valid_number?(annual_rate)
+      monthly_rate = annual_rate.to_f / 1200
+      break
+    else
+      prompt(MESSAGES['invalid_annual_percentage_rate'])
+    end
+  end
+
+  prompt("Your annual percentage rate is: " + annual_rate + "%.")
+  prompt("That means your monthly rate is: " + monthly_rate.to_s)
+
+  loan_years = ''
+  loan_months = ''
+  loop do
+    prompt(MESSAGES['loan_years'])
+    loan_years = gets.chomp
+    if valid_number?(loan_years)
+      loan_months = loan_years.to_i * 12
+      break
+    else
+      prompt(MESSAGES['invalid_loan_years'])
+    end
+  end
+
+  prompt("Your loan duration in years is: " + loan_years)
+  prompt("Your loan duration in months is: " + loan_months.to_s)
+
+  neg_loan_months = -loan_months
+  monthly_payment = loan_amount * (monthly_rate / (1 -(1 + monthly_rate)**(neg_loan_months)))
+  precise_monthly_payment = monthly_payment.round(2)
+  prompt("Your monthly payment is: $#{precise_monthly_payment}.")
+
+  prompt(MESSAGES['calculate_again'])
+  answer = Kernel.gets().chomp()
+  break unless answer.downcase() == 'y'
+end
+
+prompt(MESSAGES['goodbye'])
