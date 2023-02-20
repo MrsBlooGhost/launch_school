@@ -51,7 +51,6 @@ loop do
   end
 
   prompt("Your annual percentage rate is: " + annual_rate + "%.")
-  prompt("That means your monthly rate is: " + monthly_rate.to_s)
 
   loan_years = ''
   loan_months = ''
@@ -67,7 +66,6 @@ loop do
   end
 
   prompt("Your loan duration in years is: " + loan_years)
-  prompt("Your loan duration in months is: " + loan_months.to_s)
 
   neg_loan_months = -loan_months
   monthly_payment = loan_amount * (monthly_rate / (1 -(1 + monthly_rate)**(neg_loan_months)))
