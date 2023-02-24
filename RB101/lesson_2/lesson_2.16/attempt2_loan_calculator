@@ -1,0 +1,97 @@
+require 'yaml'
+MESSAGES = YAML.load_file('attempt2_loancalc_messages.yml')
+
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
+
+def valid_number?(number)
+  number.to_f > 0
+end
+
+def valid_name?
+  name = ''
+  loop do
+    name = Kernel.gets().chomp()
+    if name.strip.empty?()
+      prompt(MESSAGES['valid_name'])
+    else
+      break
+    end
+  end
+  prompt("Hello, #{name}!")
+end
+
+def valid_loan_amount?(loan_amount)
+  loan_amount.delete!(",")
+  valid_number?(loan_amount)
+end
+
+def valid_rate?(annual_rate)
+  (0.1..100.0).include?(annual_rate.to_f)
+end
+
+def calculate_monthly_payment(loan_months, loan_amount, monthly_rate)
+  neg_loan_months = -loan_months
+  monthly_payment = loan_amount.to_i *
+                    (monthly_rate / (1 - (1 + monthly_rate)**(neg_loan_months)))
+  monthly_payment.round(2)
+end
+
+def another_calculation?(answer)
+  answer.downcase().start_with?('y')
+end
+
+loop do
+  prompt(MESSAGES['welcome'])
+  valid_name?
+
+  loan_amount = ''
+  loop do
+    prompt(MESSAGES['loan_amount'])
+    loan_amount = Kernel.gets().chomp()
+    if valid_loan_amount?(loan_amount)
+      break
+    else
+      prompt(MESSAGES['invalid_loan_amount'])
+    end
+  end
+  prompt("Your loan amount is: $#{loan_amount}")
+
+  annual_rate = ''
+  loop do
+    prompt(MESSAGES['annual_percentage_rate'])
+    annual_rate = Kernel.gets().chomp()
+    if valid_rate?(annual_rate)
+      break
+    else
+      prompt(MESSAGES['invalid_annual_percentage_rate'])
+    end
+  end
+  monthly_rate = annual_rate.to_f / 1200
+  prompt("Your annual percentage rate is: " + annual_rate + "%.")
+
+  loan_years = ''
+  loop do
+    prompt(MESSAGES['loan_years'])
+    loan_years = Kernel.gets().chomp()
+    loan_years.delete!(",")
+    if valid_number?(loan_years)
+      break
+    else
+      prompt(MESSAGES['invalid_loan_years'])
+    end
+  end
+  loan_months = loan_years.to_f * 12
+  prompt("Your loan duration in years is: #{loan_years.to_f}.")
+
+  monthly_payment =
+    calculate_monthly_payment(loan_months, loan_amount, monthly_rate)
+  prompt("Your monthly payment is: $#{monthly_payment}.")
+
+  prompt(MESSAGES['calculate_again'])
+  answer = Kernel.gets().chomp()
+  break unless another_calculation?(answer)
+end
+
+prompt(MESSAGES['goodbye'])
