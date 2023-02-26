@@ -5,16 +5,16 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def valid_number?(number)
-  number.to_f > 0
+def prompt_welcome
+  prompt(MESSAGES['welcome'])
+  Kernel.gets().chomp()
 end
 
-def valid_name?
-  name = ''
+def valid_name?(name)
   loop do
-    name = Kernel.gets().chomp()
     if name.strip.empty?()
       prompt(MESSAGES['valid_name'])
+      name = prompt_welcome
     else
       break
     end
@@ -22,13 +22,33 @@ def valid_name?
   prompt("Hello, #{name}!")
 end
 
-def valid_loan_amount?(loan_amount)
-  loan_amount.delete!(",")
-  valid_number?(loan_amount)
+def prompt_loan_amount
+  prompt(MESSAGES['loan_amount'])
+  Kernel.gets().chomp()
 end
 
-def valid_rate?(annual_rate)
+def valid_loan_amount?(loan_amount)
+  loan_amount.delete!(",")
+  loan_amount.to_f > 0
+end
+
+def prompt_annual_rate
+  prompt(MESSAGES['annual_percentage_rate'])
+  Kernel.gets().chomp()
+end
+
+def valid_annual_rate?(annual_rate)
   (0.1..100.0).include?(annual_rate.to_f)
+end
+
+def prompt_loan_duration
+  prompt(MESSAGES['loan_years'])
+  Kernel.gets().chomp()
+end
+
+def valid_loan_duration?(loan_years)
+  loan_years.delete!(",")
+  loan_years.to_f > 0
 end
 
 def calculate_monthly_payment(loan_months, loan_amount, monthly_rate)
@@ -42,45 +62,29 @@ def another_calculation?(answer)
   answer.downcase().start_with?('y')
 end
 
-loop do
-  prompt(MESSAGES['welcome'])
-  valid_name?
+name = prompt_welcome
+valid_name?(name)
 
-  loan_amount = ''
-  loop do
-    prompt(MESSAGES['loan_amount'])
-    loan_amount = Kernel.gets().chomp()
-    if valid_loan_amount?(loan_amount)
-      break
-    else
-      prompt(MESSAGES['invalid_loan_amount'])
-    end
+loop do
+  loan_amount = prompt_loan_amount
+  while !valid_loan_amount?(loan_amount)
+    prompt(MESSAGES['invalid_loan_amount'])
+    loan_amount = prompt_loan_amount
   end
   prompt("Your loan amount is: $#{loan_amount}")
 
-  annual_rate = ''
-  loop do
-    prompt(MESSAGES['annual_percentage_rate'])
-    annual_rate = Kernel.gets().chomp()
-    if valid_rate?(annual_rate)
-      break
-    else
-      prompt(MESSAGES['invalid_annual_percentage_rate'])
-    end
+  annual_rate = prompt_annual_rate
+  while !valid_annual_rate?(annual_rate)
+    prompt(MESSAGES['invalid_annual_percentage_rate'])
+    annual_rate = prompt_annual_rate
   end
   monthly_rate = annual_rate.to_f / 1200
   prompt("Your annual percentage rate is: " + annual_rate + "%.")
 
-  loan_years = ''
-  loop do
-    prompt(MESSAGES['loan_years'])
-    loan_years = Kernel.gets().chomp()
-    loan_years.delete!(",")
-    if valid_number?(loan_years)
-      break
-    else
-      prompt(MESSAGES['invalid_loan_years'])
-    end
+  loan_years = prompt_loan_duration
+  while !valid_loan_duration?(loan_years)
+    prompt(MESSAGES['invalid_loan_years'])
+    loan_years = prompt_loan_duration
   end
   loan_months = loan_years.to_f * 12
   prompt("Your loan duration in years is: #{loan_years.to_f}.")
