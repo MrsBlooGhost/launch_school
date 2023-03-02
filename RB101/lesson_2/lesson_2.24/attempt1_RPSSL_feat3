@@ -1,0 +1,114 @@
+VALID_CHOICES = %w(rock paper scissors spock lizard)
+
+ABBREVIATIONS = { r: 'rock',
+                  p: 'paper',
+                  sc: 'scissors',
+                  sp: 'spock',
+                  l: 'lizard' }
+
+RULES = { rock: ['scissors', 'lizard'],
+          paper: ['rock', 'spock'],
+          scissors: ['paper', 'lizard'],
+          spock: ['scissors', 'rock'],
+          lizard: ['spock', 'paper'] }
+
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
+
+def prompt_welcome
+  prompt("Welcome to Rock, Papers, Scissors, Spock, Lizard!
+   Enter your name:")
+  Kernel.gets().chomp()
+end
+
+def valid_name?(name)
+  loop do
+    if name.strip.empty?()
+      prompt("Please enter a valid name.")
+      name = prompt_welcome
+    else
+      break
+    end
+  end
+  prompt("Hello, #{name}! The first player to score 3 wins the game.")
+end
+
+def valid_choice?(user_choice)
+  ABBREVIATIONS.include?(user_choice.to_sym)
+end
+
+def prompt_user_choice
+  user_choice = ''
+  loop do
+    prompt("Choose one: #{VALID_CHOICES.join(', ')}
+      (enter the first letter only. 'sc' for scissors, 'sp' for spock.)")
+    user_choice = Kernel.gets().chomp()
+    break if valid_choice?(user_choice)
+    prompt("That's not a valid choice.")
+  end
+  user_choice
+end
+
+def win?(user, computer)
+  case computer
+  when RULES[ABBREVIATIONS[user.to_sym].to_sym][0] ||
+    RULES[ABBREVIATIONS[user.to_sym].to_sym][1]
+    "You win!"
+  when ABBREVIATIONS[user.to_sym]
+    "It's a tie!"
+  else
+    "Computer wins!"
+  end
+end
+
+def display_round_result(winner)
+  prompt(winner)
+end
+
+def game_ends?(user_score, computer_score)
+  if user_score == 3
+    prompt("You win the game!")
+  elsif computer_score == 3
+    prompt("Computer wins the game!")
+  else
+    prompt_play_again
+  end
+end
+
+def prompt_play_again
+  prompt("Do you want to play again? ('Y' to play again)")
+  Kernel.gets().chomp()
+end
+
+name = prompt_welcome
+valid_name?(name)
+
+user_score = 0
+computer_score = 0
+
+loop do
+  user_choice = prompt_user_choice
+  computer_choice = VALID_CHOICES.sample
+  prompt("You chose: #{ABBREVIATIONS[user_choice.to_sym]};
+  Computer chose: #{computer_choice}")
+  winner = win?(user_choice, computer_choice)
+  display_round_result(winner)
+
+  case winner
+  when "You win!"
+    user_score += 1
+  when "Computer wins!"
+    computer_score += 1
+  else
+    user_score = user_score
+    computer_score = computer_score
+  end
+  prompt("User: #{user_score} Computer: #{computer_score}")
+
+  gameplay = game_ends?(user_score, computer_score)
+  break if user_score == 3 || computer_score == 3
+  break unless gameplay.downcase().start_with?('y')
+end
+
+prompt("Thank you for playing. Goodbye!")

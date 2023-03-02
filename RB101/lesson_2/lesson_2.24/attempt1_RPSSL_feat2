@@ -1,0 +1,65 @@
+VALID_CHOICES = %w(rock paper scissors spock lizard)
+
+ABBREVIATIONS = { r: 'rock',
+                  p: 'paper',
+                  sc: 'scissors',
+                  sp: 'spock',
+                  l: 'lizard' }
+
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
+
+def win?(first, second)
+  moves = { rock: ['scissors', 'lizard'],
+            paper: ['rock', 'spock'],
+            scissors: ['paper', 'lizard'],
+            spock: ['scissors', 'rock'],
+            lizard: ['spock', 'paper'] }
+
+  if second == moves[ABBREVIATIONS[first.to_sym].to_sym][0] || 
+     second == moves[ABBREVIATIONS[first.to_sym].to_sym][1]
+    "first"
+  elsif ABBREVIATIONS[first.to_sym] == second
+    "tie"
+  else
+    "second"
+  end
+end
+
+def display_results(player, computer)
+  if win?(player, computer) == "first"
+    prompt('User wins!')
+  elsif win?(player, computer) == "tie"
+    prompt('It\'s a tie!')
+  else
+    prompt('Computer wins!')
+  end
+end
+
+loop do
+  choice = ''
+  loop do
+    prompt("Choose one: #{VALID_CHOICES.join(', ')}
+      (enter the first letter only. 'sc' for scissors, 'sp' for spock.)")
+    choice = Kernel.gets().chomp
+
+    if ABBREVIATIONS.include?(choice.to_sym)
+      break
+    else
+      prompt("That's not a valid choice.")
+    end
+  end
+
+  computer_choice = VALID_CHOICES.sample
+
+  prompt("You chose: #{ABBREVIATIONS[choice.to_sym]}; Computer chose: #{computer_choice}")
+
+  display_results(choice, computer_choice)
+
+  prompt("Do you want to play again?")
+  answer = Kernel.gets().chomp()
+  break unless answer.downcase().start_with?('y')
+end
+
+prompt("Thank you for playing. Goodbye!")
