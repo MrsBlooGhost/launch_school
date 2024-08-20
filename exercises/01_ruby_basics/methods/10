@@ -1,0 +1,18 @@
+def name(teacher)
+  teacher.sample
+end
+
+def activity(sport)
+  sport.sample
+end
+
+def sentence(person, activity)
+  "#{person} went #{activity} today!"
+end
+
+names = ['Dave', 'Sally', 'George', 'Jessica']
+activities = ['walking', 'running', 'cycling']
+
+
+
+puts sentence(name(names), activity(activities))

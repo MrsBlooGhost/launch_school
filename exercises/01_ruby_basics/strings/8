@@ -1,0 +1,4 @@
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+split_letters = alphabet.split('')
+p split_letters

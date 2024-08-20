@@ -1,0 +1,10 @@
+puts "What is your name?"
+name = gets.chomp
+all_caps_name = name.upcase.delete_suffix('!')
+capitalized_name = name.capitalize
+
+if name.end_with?('!')
+  puts "HELLO #{all_caps_name}. WHY ARE WE SCREAMING?"
+else
+  puts "Hello #{capitalized_name}."
+end

@@ -1,0 +1,6 @@
+def assign_name(student = 'Bob')
+  student
+end
+
+puts assign_name('Kevin') == 'Kevin'
+puts assign_name == 'Bob'

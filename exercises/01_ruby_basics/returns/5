@@ -1,0 +1,10 @@
+def meal
+  'Dinner'
+  puts 'Dinner'
+end
+
+p meal
+
+# output:
+# Dinner
+# nil

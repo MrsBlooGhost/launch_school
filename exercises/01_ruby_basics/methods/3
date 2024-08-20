@@ -1,0 +1,12 @@
+def hello
+  "Hello"
+end
+
+def world
+  "World"
+end
+
+puts "#{hello} #{world}"
+
+# expected output:
+# Hello World
