@@ -2,7 +2,8 @@
 
 ## DML/DDL/DCL
 
-> **1 - DML/DDL/DCL Part 1** Name and define the remaining 2 sublanguages, and give at least 2 examples of each.
+**1 - DML/DDL/DCL Part 1** 
+> Name and define the remaining 2 sublanguages, and give at least 2 examples of each.
 
 Data Definition Language (DDL) is a component of SQL used to describe the structure of a database (schema) using the keywords `CREATE`, `ALTER`, AND `DROP`.
 
