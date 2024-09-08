@@ -41,7 +41,7 @@ SELECT lower('AbC');
 
 `t` and `f`
 
-> **7-The surface area of a sphere is calculated using the formula `A = 4πr^2`, where `A` is the surface area and `r` is the radius of the sphere. Use SQL to compute the surface area of a sphere with a radius of 26.3cm, truncated to return an integer.**
+> **7. The surface area of a sphere is calculated using the formula `A = 4πr^2`, where `A` is the surface area and `r` is the radius of the sphere. Use SQL to compute the surface area of a sphere with a radius of 26.3cm, truncated to return an integer.**
 
 ```sql
 SELECT trunc(4 * pi() * 26.3^2);
