@@ -13,18 +13,19 @@ SQL is a special purpose language, whose purpose is to interact with relational 
 3. Data control language (DCL), which controls accessibility and permissions of certain users, using `GRANT` and `REVOKE`.
 
 > **3. Write the following values as quoted string values that could be used in a SQL query.**
-```
-canoe
-a long road
-weren't
-"No way!"
-```
+> ```
+> canoe
+> a long road
+> weren't
+> "No way!"
+> ```
 ```sql
 'canoe'
 'a long road'
 'weren''t'
 '"No way!"'
 ```
+
 > **4. What operator is used to concatenate strings?**
 
 `||`
