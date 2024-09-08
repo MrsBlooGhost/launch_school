@@ -1,6 +1,6 @@
-Lesson 02: Schema, Data, and SQL
+# Lesson 02: Schema, Data, and SQL
 
-Topic 02: The SQL Language
+## Topic 02: The SQL Language
 
 **What kind of programming language is SQL?**
 
