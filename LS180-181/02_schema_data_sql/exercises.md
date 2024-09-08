@@ -12,7 +12,7 @@ SQL is a special purpose language, whose purpose is to interact with relational 
 2. Data manipulation language (DML), which controls the data stored in a relation using `SELECT`, `INSERT`, `UPDATE`, and `DELETE`.
 3. Data control language (DCL), which controls accessibility and permissions of certain users, using `GRANT` and `REVOKE`.
 
-> **3. Write the following values as quoted string values that could be used in a SQL query.**
+> 3. Write the following values as quoted string values that could be used in a SQL query.
 > ```
 > canoe
 > a long road
