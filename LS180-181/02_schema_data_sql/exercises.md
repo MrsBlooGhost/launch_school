@@ -47,3 +47,26 @@ SELECT lower('AbC');
 ```sql
 SELECT trunc(4 * pi() * 26.3^2);
 ```
+
+## Topic 05: PostgreSQL Data Types
+> Describe the difference between the `varchar` and `text` data types.
+
+`varchar` allows columns to store text up to a limited length of characters whereas `text` allows columns to store an unlimited length of text.
+
+> Describe the difference between the `integer`, `decimal`, and `real` data types.
+
+`integer` allows columns to store whole numbers. 
+`real` allows columns to store floating-point numbers. 
+`decimal` allows columns to store floating- and non-floating-point numbers of a specific precision and scale. 
+
+> What is the largest value that can be stored in an integer column?
+
+2147483647
+
+> Describe the difference between the `timestamp` and `date` data types.
+
+`timestamp` allows columns to include both a time of day and date, where as `date` data types allow columns to include only the date. 
+
+> Can a time with a time zone be stored in a column of type `timestamp`?
+
+No. There's a specific data type, `timestop with time zone`, or `timestamptz`, that should be used to store a time with a time zone in a column.
