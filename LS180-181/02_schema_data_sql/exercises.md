@@ -188,7 +188,9 @@ SELECT item, menu_price, ingredient_cost,
 ## Topic 07: Loading Database Dumps
 
 > a. What does the file do?
+
 > b. What is the output of the command? What does each line in this output mean?
+
 > c. Open up the file and look at its contents. What does the first line do?
 
 a. This file contains SQL statements. The statements drop a "films" table, if it exists, then creates a new table, and inserts 3 rows of data into it. 
