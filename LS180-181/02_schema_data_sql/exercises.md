@@ -81,6 +81,14 @@ No. There's a specific data type, `timestop with time zone`, or `timestamptz`, t
 | Mu'nisah  | 26  | NULL       |
 | Mirabelle | 40  | contractor |
 
+```sql
+CREATE TABLE (
+name text,
+age integer,
+occupation text
+);
+```
+
 > Write SQL statements to insert the data shown in #1 into the table.
 
 
