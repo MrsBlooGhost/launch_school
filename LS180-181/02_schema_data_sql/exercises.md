@@ -272,3 +272,65 @@ SELECT title
   ORDER BY duration DESC
   LIMIT 1;
 ```
+
+## Topic 08: More Single Table Queries
+
+> Create a new database called `residents` using the PostgreSQL command line tools.
+
+$ createdb residents
+
+> Load this file into the database created in #1.
+
+$ psql -d residents < file.sql
+
+> Write a SQL query to list the ten states with the most rows in the `people` table in descending order.
+
+```sql
+SELECT state, count(state) FROM people
+  GROUP BY state
+  ORDER BY count(state) DESC
+  LIMIT 10;
+```
+
+> Write a SQL query that lists each domain used in an email address in the `people` table and how many people in the database have an email address containing that domain. Domains should be listed with the most popular first.
+
+```sql
+SELECT split_part(email, '@', 2) AS domain, count(id) 
+  FROM people
+  GROUP BY domain
+  ORDER BY count(id) DESC;
+```
+
+> Write a SQL statement that will delete the person with ID `3399` from the `people` table.
+
+```sql
+DELETE FROM people
+  WHERE id = 3399;
+```
+
+> Write a SQL statement that will delete all users that are located in the state of California (`CA`).
+
+```sql
+DELETE FROM people
+  WHERE state = 'CA';
+```
+
+> Write a SQL statement that will update the `given_name` values to be all uppercase for all users with an email address that contains `teleworm.us`.
+
+```sql
+UPDATE people
+  SET given_name = UPPER(given_name)
+  WHERE split_part(email, '@', 2) LIKE 'teleworm.us';
+
+-- or
+
+UPDATE people
+  SET given_name = UPPER(given_name)
+  WHERE email LIKE '%teleworm.us';
+```
+
+> Write a SQL statement that will delete all rows from the people table.
+
+```sql
+DELETE FROM people;
+```
