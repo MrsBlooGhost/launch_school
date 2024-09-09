@@ -76,7 +76,7 @@ No. There's a specific data type, `timestop with time zone`, or `timestamptz`, t
 > Write a SQL statement that will create the following table, people:
 
 | name      | age | occupation |
-| --------- | --- | ---------- |
+| :---:     |:---:| :---:      |
 | Abby      | 34  | biologist  |
 | Mu'nisah  | 26  | NULL       |
 | Mirabelle | 40  | contractor |
