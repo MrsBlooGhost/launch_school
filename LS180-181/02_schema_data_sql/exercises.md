@@ -193,7 +193,7 @@ SELECT item, menu_price, ingredient_cost,
 
 > c. Open up the file and look at its contents. What does the first line do?
 
-a. This file contains SQL statements. The statements drop a "films" table, if it exists, then creates a new table, and inserts 3 rows of data into it. 
+This file contains SQL statements. The statements drop a "films" table, if it exists, then creates a new table, and inserts 3 rows of data into it. 
 
 ```sql
 NOTICE:  table "films" does not exist, skipping
