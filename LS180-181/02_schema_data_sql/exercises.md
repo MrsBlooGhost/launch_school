@@ -573,3 +573,74 @@ No.
 > How can you see a list of all of the constraints on a table?
 
 `\d` passed the name of the table as an argument.
+
+## Topic 11: Using Keys
+
+> Write a SQL statement that makes a new sequence called "counter".
+
+```sql
+CREATE SEQUENCE counter;
+```
+
+> Write a SQL statement to retrieve the next value from the sequence created in #1.
+
+```sql
+SELECT nextval('counter');
+```
+
+> Write a SQL statement that removes a sequence called "counter".
+
+
+```sql
+DROP SEQUENCE counter;
+```
+
+> Is it possible to create a sequence that returns only even numbers? The documentation for sequence might be useful.
+
+Yes.
+
+```sql
+CREATE SEQUENCE only_evens 
+  INCREMENT BY 2
+  START WITH 2;
+```
+
+> What will the name of the sequence created by the following SQL statement be?
+
+`regions_id_seq`
+
+> Write a SQL statement to add an auto-incrementing integer primary key column to the `films` table.
+
+```sql
+ALTER TABLE films
+  ADD COLUMN id serial PRIMARY KEY;
+```
+
+> What error do you receive if you attempt to update a row to have a value for `id` that is used by another row?
+
+```sql
+UPDATE films
+  SET id = 6
+  WHERE title = 'Godzilla';
+```
+
+```
+ERROR:  duplicate key value violates unique constraint "films_pkey"
+DETAIL:  Key (id)=(6) already exists.
+```
+
+> What error do you receive if you attempt to add another primary key column to the `films` table?
+
+```sql
+ALTER TABLE films
+  ADD COLUMN another_pkey serial PRIMARY KEY;
+```
+
+`ERROR:  multiple primary keys for table "films" are not allowed`
+
+> Write a SQL statement that modifies the table `films` to remove its primary key while preserving the id column and the values it contains.
+
+```sql
+ALTER TABLE films
+  DROP CONSTRAINT films_pkey;
+```
