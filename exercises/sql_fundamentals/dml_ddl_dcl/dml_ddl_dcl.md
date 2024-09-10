@@ -5,14 +5,14 @@
 **1 - DML/DDL/DCL Part 1** 
 > Name and define the remaining 2 sublanguages, and give at least 2 examples of each.
 
-Data Definition Language (DDL) is a component of SQL used to describe the structure of a database (schema) using the keywords `CREATE`, `ALTER`, AND `DROP`.
+Data Definition Language (DDL) is a component of SQL used to describe the structure of a database (schema) using the keywords `CREATE`, `ALTER`, and `DROP`.
 
 Data Manipulation Language (DML) is a component of SQL used to manipulate the data stored in a database using the keywords `SELECT`, `INSERT`, `UPDATE`, and `DELETE`.
 
 **2 - DML/DDL/DCL Part 2**
 > Does the following statement use the Data Definition Language (DDL) or the Data Manipulation Language (DML) component of SQL?
 
-`SELECT` queries the data in a database. Because it manipulates the *data* in the database, it is part of the the DML component of SQL.
+`SELECT` queries the data in a database. Because it manipulates the *data* in the database, it is part of the DML component of SQL.
 
 **3 - DML/DDL/DCL Part 3**
 > Does the following statement use the DDL or DML component of SQL?
