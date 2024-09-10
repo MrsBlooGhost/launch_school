@@ -644,3 +644,84 @@ ALTER TABLE films
 ALTER TABLE films
   DROP CONSTRAINT films_pkey;
 ```
+
+## Topic 12: `GROUP BY` and Aggregate Functions
+
+> Import this file into a database.
+
+`$ psql -d dbname < file.sql`
+
+> Write SQL statements that will insert the following films into the database:
+
+```sql
+INSERT INTO films (title, year, genre, director, duration)
+  VALUES ('Wayne''s World', 1992, 'comedy', 'Penelope Spheeris', 95),
+         ('Bourne Identity', 2002, 'espionage', 'Doug Liman', 118);
+```
+
+> Write a SQL query that lists all genres for which there is a movie in the `films` table.
+
+```sql
+SELECT DISTINCT genre FROM films;
+```
+
+> Write a SQL query that returns the same results as the answer for #3, but without using `DISTINCT`.
+
+```sql
+SELECT genre FROM films
+  GROUP BY genre;
+```
+
+> Write a SQL query that determines the average duration across all the movies in the `films` table, rounded to the nearest minute.
+
+```sql
+SELECT ROUND(AVG(duration)) FROM films;
+```
+
+> Write a SQL query that determines the average duration for each genre in the `films` table, rounded to the nearest minute.
+
+```sql
+SELECT genre, ROUND(AVG(duration)) AS average_duration FROM films
+  GROUP BY genre;
+```
+
+> Write a SQL query that determines the average duration of movies for each decade represented in the `films` table, rounded to the nearest minute and listed in chronological order.
+
+```sql
+SELECT year / 10 * 10 AS decade, ROUND(AVG(duration), 0) AS average_duration FROM films
+  GROUP BY decade
+  ORDER BY decade;
+```
+
+> Write a SQL query that finds all films whose director has the first name `John`.
+
+```sql
+SELECT * FROM films
+  WHERE director LIKE 'John %';
+```
+
+> Write a SQL query that will return the following data:
+
+```sql
+SELECT genre, count(id) FROM films
+  GROUP BY genre
+  ORDER BY count(id) DESC;
+```
+
+> Write a SQL query that will return the following data:
+
+```sql
+SELECT year / 10 * 10 AS decade, genre, string_agg(title, ', ') AS films 
+  FROM films
+  GROUP BY decade, genre
+  ORDER BY decade, genre;
+```
+
+> Write a SQL query that will return the following data:
+
+```sql
+SELECT genre, sum(duration) AS total_duration
+  FROM films
+  GROUP BY genre
+  ORDER BY total_duration, genre;
+```
