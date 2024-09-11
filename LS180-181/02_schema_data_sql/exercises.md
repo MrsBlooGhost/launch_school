@@ -69,7 +69,7 @@ SELECT trunc(4 * pi() * 26.3^2);
 
 > Can a time with a time zone be stored in a column of type `timestamp`?
 
-No. There's a specific data type, `timestop with time zone`, or `timestamptz`, that should be used to store a time with a time zone in a column.
+No. There's a specific data type, `timestamp with time zone`, or `timestamptz`, that should be used to store a time with a time zone in a column.
 
 ## Topic 06: Working with a Single Table
 
@@ -77,10 +77,10 @@ No. There's a specific data type, `timestop with time zone`, or `timestamptz`, t
 
 ```sql
 CREATE TABLE people (
-name text,
-age integer,
-occupation text
-);
+  name text,
+  age integer,
+  occupation text
+  );
 ```
 
 > Write SQL statements to insert the data shown in #1 into the table.
@@ -208,12 +208,16 @@ The first line, `DROP TABLE IF EXISTS public.films;`, removes a table "films" if
 
 > Write a SQL statement that returns all rows in the **films** table.
 
-`SELECT * FROM films;`
+```sql
+SELECT * 
+  FROM films;
+```
 
 > Write a SQL statement that returns all rows in the **films** table with a title shorter than 12 letters.
 
 ```sql
-SELECT * FROM films
+SELECT * 
+  FROM films
   WHERE length(title) < 12;
 ```
 
@@ -250,7 +254,7 @@ INSERT INTO films (title, "year", genre, director, duration)
 > Write a SQL statement that will return the title and age in years of each movie, with newest movies listed first:
 
 ```sql
-SELECT title, EXTRACT(year FROM CURRENT_DATE) - "year" AS age 
+SELECT title, date_part('year', CURRENT_DATE) - "year" AS age 
   FROM films
   ORDER BY age;
 ```
