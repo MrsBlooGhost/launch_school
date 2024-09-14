@@ -365,7 +365,7 @@ ALTER TABLE employees
 
 ```sql
 CREATE TABLE temperatures (
-  "date" date NOT NULL,
+  date date NOT NULL,
   low integer NOT NULL,
   high integer NOT NULL);
 ```
@@ -373,7 +373,7 @@ CREATE TABLE temperatures (
 > Write the SQL statements needed to insert the data shown in #3 into the **temperatures** table.
 
 ```sql
-INSERT INTO temperatures ("date", low, high)
+INSERT INTO temperatures (date, low, high)
   VALUES ('2016-03-01', 34, 43),
          ('2016-03-02', 32, 44),
          ('2016-03-03', 31, 47),
@@ -390,7 +390,7 @@ INSERT INTO temperatures ("date", low, high)
 ```sql
 SELECT date, round(((high + low) / 2.0), 1) AS average
   FROM temperatures
-  WHERE EXTRACT(day FROM date) >= 02 AND EXTRACT(day FROM date) <= 08;
+  WHERE DATE_PART('day', date) >= 02 AND DATE_PART('day', date) <= 08;
 ```
 
 We can also use the comparison predicate `BETWEEN` in combination with `AND` to find specific rows:
@@ -566,9 +566,9 @@ DETAIL:  Failing row contains (Die Hard, 1988, action, Johnny, 132).
 
 > List three ways to use the schema to restrict what values can be stored in a column.
 
-- Defining a CHECK constraint for those columns,
-- Set a NOT NULL constraint for a column
-- Define CHECK constraints for columns
+- Set data type for the column
+- Set a NOT NULL constraint for the column
+- Define a CHECK constraint for the column
 
 > Is it possible to define a default value for a column that will be considered invalid by a constraint? Create a table that tests this.
 
