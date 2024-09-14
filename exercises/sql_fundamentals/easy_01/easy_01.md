@@ -16,12 +16,14 @@ CREATE DATABASE animals;
 **2	- Create a Table**
 > Make a table called `birds`. It should have the following fields:
 
+```sql
 CREATE TABLE birds (
   id SERIAL PRIMARY KEY,
   name VARCHAR(25),
   age INTEGER,
   species VARCHAR(15)
 );
+```
 
 **3	- Insert Data**
 > For this exercise, we'll add some data to our `birds` table. Add five records to this database so that our data looks like:
