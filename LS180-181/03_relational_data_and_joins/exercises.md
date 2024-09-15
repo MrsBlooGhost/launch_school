@@ -60,11 +60,6 @@ SELECT count(id) FROM tickets;
 SELECT COUNT(DISTINCT customer_id) FROM tickets;
 ```
 
-  count
--------
-  1652
-(1 row)
-
 > Write a query that determines what percentage of the customers in the database have purchased a ticket to one or more of the events.
 
 ```sql
