@@ -110,3 +110,155 @@ SELECT e.name AS event,
     ON seats.section_id = sections.id
   WHERE c.email = 'gennaro.rath@mcdermott.co';
 ```
+
+## Topic 07: Using Foreign Keys
+
+> Import this file into a new database.
+
+```
+$ createdb dbname
+$ psql -d dbname < file.sql
+```
+
+or
+
+Connect to the database. Then...
+```sql
+\i file.sql
+```
+
+> Update the `orders` table so that referential integrity will be preserved for the data between `orders` and `products`.
+
+```sql
+ALTER TABLE orders
+  ADD CONSTRAINT orders_product_id_fkey
+  FOREIGN KEY (product_id) REFERENCES products(id);
+```
+
+> Use `psql` to insert the data shown in the following table into the database:
+
+```sql
+INSERT INTO products (id, name)
+  VALUES (1, 'small bolt'),
+         (2, 'large bolt');
+
+INSERT INTO orders (id, product_id, quantity)
+  VALUES (1, 1, 10),
+         (2, 1, 25),
+         (3, 2, 15);
+```
+
+> Write a SQL statement that returns a result like this:
+
+```sql
+SELECT o.quantity, p.name
+  FROM orders AS o
+  INNER JOIN products AS p
+    ON o.product_id = p.id;
+```
+
+> Can you insert a row into `orders` without a `product_id`? Write a SQL statement to prove your answer.
+
+Yes. There isn't a `NOT NULL` constraint on `product_id`.
+
+```sql
+INSERT INTO orders (id, product_id, quantity)
+  VALUES (4, NULL, 100);
+```
+
+> Write a SQL statement that will prevent NULL values from being stored in orders.product_id. What happens if you execute that statement?
+
+> Make any changes needed to avoid the error message encountered in #6.
+
+```sql
+DELETE FROM orders
+  WHERE product_id IS NULL;
+
+ALTER TABLE orders
+  ALTER COLUMN product_id SET NOT NULL;
+```
+
+> Create a new table called `reviews` to store the data shown below. This table should include a primary key and a reference to the `products` table.
+
+```sql
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  body TEXT NOT NULL,
+  product_id INTEGER REFERENCES products (id);
+```
+
+> Write SQL statements to insert the data shown in the table in #8.
+
+```sql
+INSERT INTO reviews (body, product_id)
+  VALUES ('a little small', 1),
+         ('very round!', 1),
+         ('could have been smaller', 2);
+```
+
+> True or false: A foreign key constraint prevents NULL values from being stored in a column.
+
+False. Froeign key columns allow `NULL` values.
+
+## Topic 08: One-to-Many Relationships
+
+> Write a SQL statement to add the following call data to the database:
+
+```sql
+INSERT INTO calls ("when", duration, contact_id)
+  VALUES ('2016-01-18 14:47:00', 632,	6);
+```
+
+> Write a SQL statement to retrieve the call times, duration, and first name for all calls **not** made to William Swift.
+
+```sql
+SELECT calls.when, calls.duration, contacts.first_name
+  FROM calls
+  INNER JOIN contacts
+    ON calls.contact_id = contacts.id
+  WHERE (contacts.first_name || ' ' || contacts.last_name) != 'William Swift';
+```
+
+> Write SQL statements to add the following call data to the database:
+
+```sql
+INSERT INTO contacts (first_name, last_name, number)
+  VALUES ('Merve', 'Elk', 6343511126),
+         ('Sawa', 'Fyodorov', 6125594874);
+
+INSERT INTO calls ("when", duration, contact_id)
+  VALUES ('2016-01-17 11:52:00', 175, 26),
+         ('2016-01-18 21:22:00', 79, 27);
+```
+
+> Add a constraint to **contacts** that prevents a duplicate value being added in the column `number`.
+
+```sql
+ALTER TABLE contacts
+  ADD CONSTRAINT unique_number UNIQUE (number);
+```
+
+> Write a SQL statement that attempts to insert a duplicate number for a new contact but fails. What error is shown?
+
+```sql
+INSERT INTO contacts (first_name, last_name, number)
+  VALUES ('Gerald', 'Arnold', 6125594874);
+
+ERROR:  duplicate key value violates unique constraint "unique_number"
+DETAIL:  Key (number)=(6125594874) already exists.
+```
+
+> Why does "when" need to be quoted in many of the queries in this lesson?
+
+"when" is a SQL keyword. Because we intend to utilize it as an identifier and not a keyword in our queries, we need to escape it by surrounding it with quotes.
+
+> Draw an entity-relationship diagram for the data we've been working with in this assignment.
+ _________         ______
+|         |    /  |      |
+| contact | --O-  | call |
+|_________|    \  |______|
+
+One contact - to - many calls
+The circle on the Call side indicates that it is optional.
+
+## Topic
