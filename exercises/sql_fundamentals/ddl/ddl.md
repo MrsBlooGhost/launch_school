@@ -178,5 +178,3 @@ CREATE TABLE moons (
 
 DROP DATABASE extrasolar;
 ```
-
-## DML
