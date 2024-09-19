@@ -344,4 +344,86 @@ SELECT c.name, COUNT(b.id) AS book_count, STRING_AGG(b.title, ', ') AS book_titl
   ORDER BY c.name;
 ```
 
-## Topic 
+## Topic 13: Converting a 1:M Relationship to a M:M Relationship
+
+> Write the SQL statement needed to create a join table that will allow a film to have multiple directors, and directors to have multiple films. Include an `id` column in this table, and add foreign key constraints to the other columns.
+
+```sql
+CREATE TABLE directors_films (
+  id serial PRIMARY KEY,
+  director_id integer REFERENCES directors (id) ON DELETE CASCADE,
+  film_id integer REFERENCES films (id) ON DELETE CASCADE,
+  UNIQUE (director_id, film_id)
+);
+```
+
+> Write the SQL statements needed to insert data into the new join table to represent the existing one-to-many relationships.
+
+```sql
+INSERT INTO directors_films (director_id, film_id)
+  VALUES (1, 1),
+         (2, 2),
+         (3, 3),
+         (3, 7),
+         (4, 4),
+         (4, 10),
+         (5, 5),
+         (6, 6),
+         (7, 8),
+         (8, 9);                                   
+```
+
+> Write a SQL statement to remove any unneeded columns from films.
+
+```sql
+ALTER TABLE films
+  DROP COLUMN director_id;
+```
+> Write a SQL statement that will return the following result:
+
+```sql
+SELECT f.title, d.name
+  FROM directors_films AS df
+    INNER JOIN directors AS d
+      ON df.director_id = d.id
+    INNER JOIN films AS f
+      ON df.film_id = f.id
+  ORDER BY f.title;
+```
+
+> Write SQL statements to insert data for the following films into the database:
+
+```sql
+INSERT INTO films (title, year, genre, duration)
+  VALUES ('Fargo', 1996, 'comedy', 98),
+         ('No Country for Old Men', 2007, 'western', 122),
+         ('Sin City', 2005, 'crime', 124),
+         ('Spy Kids', 2001, 'scifi', 88);
+
+INSERT INTO directors (name)
+  VALUES ('Joel Coen'),
+         ('Ethan Coen'),
+         ('Frank Miller'),
+         ('Robert Rodriguez');
+
+INSERT INTO directors_films (director_id, film_id)
+  VALUES (9, 11),
+         (9, 12),
+         (10, 12),
+         (11, 13),
+         (12, 13),
+         (12, 14);
+```
+
+> Write a SQL statement that determines how many films each director in the database has directed. Sort the results by number of films (greatest first) and then name (in alphabetical order).
+
+```sql
+SELECT d.name AS director, COUNT(f.id) AS films
+  FROM directors_films AS df
+  INNER JOIN directors AS d
+    ON df.director_id = d.id
+  INNER JOIN films AS f
+    ON df.film_id = f.id
+  GROUP BY d.id
+  ORDER BY films DESC, d.name;
+```
