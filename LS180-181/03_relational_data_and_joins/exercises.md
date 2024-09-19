@@ -261,4 +261,87 @@ DETAIL:  Key (number)=(6125594874) already exists.
 One contact - to - many calls
 The circle on the Call side indicates that it is optional.
 
-## Topic
+## Topic 12: Many-to-Many Relationships
+
+> The `books_categories` table from this database was created with foreign keys that don't have the `NOT NULL` and `ON DELETE CASCADE` constraints. Go ahead and add them now.
+
+```sql
+-- Add the `NOT NULL` constraint
+ALTER TABLE books_categories
+  ALTER COLUMN book_id SET NOT NULL,
+  ALTER COLUMN category_id SET NOT NULL;
+
+-- Add the `ON DELETE CASCADE` constraint
+ALTER TABLE books_categories
+  DROP CONSTRAINT books_categories_book_id_fkey,
+  ADD CONSTRAINT books_categories_book_id_fkey
+    FOREIGN KEY (book_id) REFERENCES books (id) 
+      ON DELETE CASCADE, 
+  DROP CONSTRAINT books_categories_category_id_fkey,
+  ADD CONSTRAINT books_categories_category_id_fkey
+    FOREIGN KEY (category_id) REFERENCES categories (id) 
+      ON DELETE CASCADE;
+```
+
+> Write a SQL statement that will return the following result:
+
+```sql
+SELECT b.id, b.author, string_agg(c.name, ', ') AS categories
+  FROM books AS b
+    INNER JOIN books_categories
+      ON b.id = books_categories.book_id
+    INNER JOIN categories AS c
+      ON c.id = books_categories.category_id
+  GROUP BY b.id
+  ORDER BY b.id;
+```
+
+> Write SQL statements to insert the following new books into the database. What do you need to do to ensure this data fits in the database?
+
+```sql
+ALTER TABLE books
+  ALTER COLUMN title TYPE text,
+  ALTER COLUMN author TYPE varchar(50);
+
+INSERT INTO books (author, title)
+  VALUES ('Lynn Sherr', 'Sally Ride: America''s First Woman in Space'),
+         ('Charlotte Brontë', 'Jane Eyre'),
+         ('Meeru Dhalwala and Vikram Vij', 'Vij''s: Elegant and Inspired Indian Cuisine');
+
+INSERT INTO categories (name)
+  VALUES ('Space Exploration'),
+         ('Cookbook'),
+         ('South Asia');
+
+INSERT INTO books_categories (book_id, category_id)
+  VALUES (4, 5),   
+         (4, 1),
+         (4, 7),
+         (5, 2),
+         (5, 4),
+         (6, 8),
+         (6, 1),
+         (6, 10);                                                                      
+```
+
+> Write a SQL statement to add a uniqueness constraint on the combination of columns `book_id` and `category_id` of the `books_categories` table. This constraint should be a table constraint; so, it should check for uniqueness on the combination of `book_id` and `category_id` across all rows of the `books_categories` table.
+
+```sql
+ALTER TABLE books_categories
+  ADD UNIQUE (book_id, category_id);
+```
+
+> Write a SQL statement that will return the following result:
+
+```sql
+SELECT c.name, COUNT(b.id) AS book_count, STRING_AGG(b.title, ', ') AS book_titles
+  FROM books_categories AS bc
+    INNER JOIN books AS b
+      ON bc.book_id = b.id
+    INNER JOIN categories AS c
+      ON bc.category_id = c.id
+  GROUP BY c.id
+  ORDER BY c.name;
+```
+
+## Topic 
