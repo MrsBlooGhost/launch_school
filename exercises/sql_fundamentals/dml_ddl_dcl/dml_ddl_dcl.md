@@ -31,6 +31,7 @@ Data Manipulation Language (DML) is a component of SQL used to manipulate the da
 
 **6 - DML/DDL/DCL Part 6**
 > Does the following statement use the DDL or DML component of SQL?
+
 `UPDATE` modifies specific rows of data in a database. Because it manipulates the *data* in the database, it uses the DML component of SQL. 
 
 **7 - DML/DDL/DCL Part 7**

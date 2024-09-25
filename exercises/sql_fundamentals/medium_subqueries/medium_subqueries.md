@@ -49,11 +49,14 @@ CREATE INDEX ON bids (bidder_id, item_id);
 SELECT name AS "Bid on Items"
   FROM items
   WHERE items.id 
-  IN (SELECT DISTINCT item_id FROM bids);
+    IN 
+      (SELECT DISTINCT item_id 
+      FROM bids);
 ```
 
 Questions:
 - Where, syntactically, do I put the "AS" clause in order to rename the column to "Bid on Items"?
+- In my subquery, I didn't include a SELECT DISTINCT clause, but the official solution does. This comes down to a performance issue that I didn't account for nor do I think we need to know at this point.
 
 **3 -	Conditional Subqueries: NOT IN**
 > Write a SQL query that shows all items that have not had bids put on them. Use the logical operator `NOT IN` for this exercise, as well as a subquery.
@@ -62,7 +65,9 @@ Questions:
 SELECT name AS "Not Bid On"
   FROM items
   WHERE items.id
-    NOT IN (SELECT item_id FROM bids);
+    NOT IN 
+      (SELECT item_id 
+      FROM bids);
 ```
 
 **4 -	Conditional Subqueries: EXISTS**
