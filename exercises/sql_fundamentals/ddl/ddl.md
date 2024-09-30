@@ -75,16 +75,16 @@ ALTER TABLE stars
 **Further Exploration**
 > Assume the `stars` table contains one or more rows that are missing a `spectral_type` value, or that have an illegal value. What will happen when you try to alter the table schema? How would you go about adjusting the data to work around this problem. To test this, revert the modification and add some data:
 
-If we attempt to add a constraint to the column `spectral_type` of `NOT NULL`, an error is through because there are currently `NULL` values in the column: `column "spectral_type" of relation "stars" contains null values`. In order to bypass this error, we'd have to first remove the rows with `NULL` values in column `spectral_type`, then add the constraint.
+If we attempt to add a constraint to the column `spectral_type` of `NOT NULL`, an error is thrown because there are currently `NULL` values in the column: `column "spectral_type" of relation "stars" contains null values`. In order to bypass this error, we'd have to first remove the rows with `NULL` values in column `spectral_type`, then add the constraint.
 
-Now, if we attempt to add a CHECK constraint to the column `spectral_type` that limits entry of column data to 7 values, an error is through because the constraint is violated by a row of data that contains a value other than the 7 values listed in the CHECK constraint we're attemping to add. In order to bypass this error, we'd have to first remove the row containing the data violating the constraint, then add the constraint.
+Now, if we attempt to add a CHECK constraint to the column `spectral_type` that limits entry of column data to 7 values, an error is thrown because the constraint is violated by a row of data that contains a value other than the 7 values listed in the CHECK constraint we're attemping to add. In order to bypass this error, we'd have to first remove the row containing the data violating the constraint, then add the constraint.
 
 Note: An seamless way to delete those specific rows of data are to use the companion to `IN`, `NOT IN`, along with keyword `IS NULL`:
 
 ```sql
 DELETE FROM stars
   WHERE (spectral_type NOT IN ('O', 'B', 'A', 'F', 'G', 'K', 'M')
-    OR spectral_-_type IS NULL;
+    OR spectral_type IS NULL;
 ```
 
 **6	- Enumerated Types**
