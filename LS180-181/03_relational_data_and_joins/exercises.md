@@ -198,7 +198,7 @@ INSERT INTO reviews (body, product_id)
 
 > True or false: A foreign key constraint prevents NULL values from being stored in a column.
 
-False. Froeign key columns allow `NULL` values.
+False. Foreign key columns allow `NULL` values.
 
 ## Topic 08: One-to-Many Relationships
 

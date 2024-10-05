@@ -627,28 +627,20 @@ WHERE side = 'Fries';
   -- 1b. Remove the continent column from the countries table.
 
   ALTER TABLE countries
-  DROP COLUMN continent;
+    DROP COLUMN continent;
 
   -- 1c. Add a continent_id column to the countries table of type integer.
 
   ALTER TABLE countries
-  ADD COLUMN continent_id integer;
+    ADD COLUMN continent_id integer;
 
   -- 1d. Add a Foreign Key constraint to the continent_id column which references the id field of the continents table.
 
   ALTER TABLE countries
-  ADD FOREIGN KEY (continent_id) 
-  REFERENCES continents(id);
+    ADD FOREIGN KEY (continent_id) 
+    REFERENCES continents(id);
 
 -- 2. Write statements to add data to the countries and continents tables so that the data below is correctly represented across the two tables. Add both the countries and the continents to their respective tables in alphabetical order.
-
--- Name	    Capital	        Population	  Continent
--- France	  Paris	          67,158,000	  Europe
--- USA	    Washington D.C.	325,365,189	  North America
--- Germany	Berlin	        82,349,400	  Europe
--- Japan	  Tokyo	          126,672,000	  Asia
--- Egypt	  Cairo	          96,308,900	  Africa
--- Brazil	  Brasilia	      208,385,000	  South America
 
 INSERT INTO continents (continent_name)
 VALUES
@@ -668,16 +660,6 @@ VALUES
 ('Brazil', 'Brasilia', 208385000, 5);
 
 -- 3. Examine the data below:
-
--- Album Name	        Released	        Genre	                          Label	                    Singer Name
--- Born to Run	      August 25, 1975	  Rock and roll	                  Columbia	                Bruce Springsteen         
--- Purple Rain	      June 25, 1984	    Pop, R&B, Rock	                Warner Bros	              Prince
--- Born in the USA	  June 4, 1984	    Rock and roll, pop	            Columbia	                Bruce Springsteen           
--- Madonna	          July 27, 1983	    Dance-pop, post-disco	          Warner Bros	              Madonna
--- True Blue	        June 30, 1986	    Dance-pop, Pop	                Warner Bros	              Madonna
--- Elvis	            October 19, 1956	Rock and roll, Rhythm and Blues	RCA Victor	              Elvis Presley
--- Sign o' the Times	March 30, 1987	  Pop, R&B, Rock, Funk	          Paisley Park, Warner Bros	Prince
--- G.I. Blues	        October 1, 1960	  Rock and roll, Pop	            RCA Victor	              Elvis Presley
 
 -- We want to create an albums table to hold all the above data except the singer name, and create a reference from the albums table to the singers table to link each album to the correct singer. Write the necessary SQL statements to do this and to populate the table with data. Assume Album Name, Genre, and Label can hold strings up to 100 characters. Include an auto-incrementing id column in the albums table.
 
