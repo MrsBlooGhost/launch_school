@@ -83,18 +83,16 @@ expenses=# ALTER TABLE expenses
 ## Topic 08: Listing Expenses
 
 > Connect to the `expenses` database and print out the information for all expenses in the system.
-
+> - [x] Create a connection to the database.
+> - [x] Execute a query to retrieve all rows from the `expenses` table, ordered from oldest to newest.
+> - [x] Iterate through each result row and print it to the screen. The result should look like this:
 
 ```ruby
 require 'pg'
 
-# Create a connection to the database
 connection = PG.connect(dbname: "expenses")
-
-# Execute a query to retrieve all rows from the expenses table, ordered from oldest to newest
 result = connection.exec("SELECT * FROM expenses ORDER BY created_on;")
 
-# Iterate through each result row and print it to the screen. THe result should look like this:
 result.each do |tuple|
   columns = [ tuple["id"].rjust(3),
               tuple["created_on"].rjust(10),
