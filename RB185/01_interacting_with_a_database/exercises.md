@@ -87,7 +87,6 @@ end
 ## Topic 09: Displaying Help
 
 > Display a list of expenses when passed the list argument, and help content otherwise.
-
 > Implementation:
 > - [ ] Move the existing expense listing code into a method.
 > - [ ] Add a new method that prints out the help content.
