@@ -2,8 +2,7 @@
 
 ## Topic 07: Database Design
 
-> Create a database to store the expenses managed by this project.
-> Implementation:
+> - Create a database to store the expenses managed by this project.
 > - [x] Design a table called `expenses` that can hold the data for expenses.
 > - [x] This table should have columns named `id`, `amount`, `memo`, and `created_on`.
 > - [x] Write the SQL to create that table into a file called `schema.sql`.
