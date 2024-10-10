@@ -162,9 +162,10 @@ The rule for stripping enough whitespace: The indentation of the least-indented 
 
 ## Topic 10: Adding Expenses
 
+> Requirements:
 > 1. Add a command, `add`, that can be used to add new expenses to the system. It should look like this in use:
-
 > 2. Make sure that this command is always passed any additional parameters needed to add an expense. If it isn't display an error message:
 
+> Implementation:
 > - [ ] Check to see if the first argument passed to the program is `add`. If it is, check to make sure that two more arguments were also passed. If they weren't, print out an error message and exit.
 > - [ ] Call a new method, add_expense, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the expenses table.
