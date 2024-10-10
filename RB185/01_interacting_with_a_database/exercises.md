@@ -88,9 +88,9 @@ end
 
 > Display a list of expenses when passed the list argument, and help content otherwise.
 
-Implementation:
-- [] Move the existing expense listing code into a method.
-- [] Add a new method that prints out the help content.
-- [] Check the value of the first argument passed to the program, and call the appropriate method.
+> Implementation:
+> - [ ] Move the existing expense listing code into a method.
+> - [ ] Add a new method that prints out the help content.
+> - [ ] Check the value of the first argument passed to the program, and call the appropriate method.
 
 For this assignment, we'll need access to the arguments passed into our CLI program. When writing a script, we can access the list of arguments passed into a command-line program with ARGV. In your Ruby script, ARGV will be an Array of arguments that have been passed to your command-line program.
