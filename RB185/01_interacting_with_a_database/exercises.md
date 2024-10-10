@@ -156,6 +156,15 @@ end
 
 > Describe what is happening on line 20 of the Solution shown above.
 
-Line 20 is the beginning of a heredoc (short for "here document") block. A heredoc is a way to define multi-line strings in a more readable way when writing a large block of text. The `<<` operator starts the heredoc, followed by an arbitrary `INDENTIFIER` label and a closing `IDENTIFIER` that must match the opening one. The squiggly heredoc (`<<~`), which we use in the solution, strips leading whitespace from the beginning of each line in the heredoc block. This allows us to indent the content and the closing identifier in a natural, readable way.
+Line 20 is the beginning of a heredoc (short for "here document") block. A heredoc is a way to define multi-line strings in a more readable way when writing a large block of text. The `<<` operator starts the heredoc, followed by an arbitrary `INDENTIFIER` label and a closing `IDENTIFIER` that must match the opening one. The squiggly heredoc (`<<~`) strips leading whitespace from the beginning of each line in the heredoc block. This allows us to indent the content and the closing identifier in a natural, readable way.
 
 The rule for stripping enough whitespace: The indentation of the least-indented line will be removed from each line of the content.
+
+## Topic 10: Adding Expenses
+
+> 1. Add a command, `add`, that can be used to add new expenses to the system. It should look like this in use:
+
+> 2. Make sure that this command is always passed any additional parameters needed to add an expense. If it isn't display an error message:
+
+> - [ ] Check to see if the first argument passed to the program is `add`. If it is, check to make sure that two more arguments were also passed. If they weren't, print out an error message and exit.
+> - [ ] Call a new method, add_expense, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the expenses table.
