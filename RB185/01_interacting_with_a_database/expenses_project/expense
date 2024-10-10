@@ -2,9 +2,11 @@
 
 require 'pg'
 
+# Adding a constant here allows us to access the connection from within both list_expenses and add_expense. This is a sign that we were missing an object in our design.
+CONNECTION = PG.connect(dbname: "expenses")
+
 def list_expenses
-  connection = PG.connect(dbname: "expenses")
-  result = connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+  result = CONNECTION.exec("SELECT * FROM expenses ORDER BY created_on;")
 
   result.each do |tuple|
     columns = [ tuple["id"].rjust(3),
@@ -14,6 +16,12 @@ def list_expenses
 
     puts columns.join(" | ")
   end
+end
+
+def add_expense(amount, memo)
+  sql = "INSERT INTO expenses (amount, memo, created_on) VALUES (#{amount}, '#{memo}', CURRENT_DATE)"
+
+  CONNECTION.exec(sql)
 end
 
 def display_help
@@ -33,6 +41,10 @@ end
 cmd = ARGV[0]
 if cmd == "list"
   list_expenses
+elsif cmd == "add"
+  amount = ARGV[1]
+  memo = ARGV[2]
+  puts amount && memo ? add_expense(amount, memo) : abort("You must provide an amount and memo.")
 else
   display_help
 end

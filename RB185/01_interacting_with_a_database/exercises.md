@@ -168,4 +168,61 @@ The rule for stripping enough whitespace: The indentation of the least-indented 
 
 > Implementation:
 > - [ ] Check to see if the first argument passed to the program is `add`. If it is, check to make sure that two more arguments were also passed. If they weren't, print out an error message and exit.
-> - [ ] Call a new method, add_expense, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the expenses table.
+> - [ ] Call a new method, `add_expense`, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the `expenses` table.
+
+```ruby
+#! /usr/bin/env ruby
+
+require 'pg'
+
+# Adding a constant here allows us to access the connection from within both list_expenses and add_expense. This is a sign that we were missing an object in our design.
+CONNECTION = PG.connect(dbname: "expenses")
+
+def list_expenses
+  result = CONNECTION.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+  result.each do |tuple|
+    columns = [ tuple["id"].rjust(3),
+                tuple["created_on"].rjust(10),
+                tuple["amount"].rjust(12),
+                tuple["memo"] ]
+
+    puts columns.join(" | ")
+  end
+end
+
+def add_expense(amount, memo)
+  sql = "INSERT INTO expenses (amount, memo, created_on) VALUES (#{amount}, '#{memo}', CURRENT_DATE)"
+
+  CONNECTION.exec(sql)
+end
+
+def display_help
+  puts <<~HELP
+    An expense recording system
+
+    Commands:
+    
+    add AMOUNT MEMO - record a new expense
+    clear - delete all expenses
+    list - list all expenses
+    delete NUMBER - remove expense with id NUMBER
+    search QUERY - list expenses with a matching memo field
+  HELP
+end
+
+cmd = ARGV[0]
+if cmd == "list"
+  list_expenses
+elsif cmd == "add"
+  amount = ARGV[1]
+  memo = ARGV[2]
+  puts amount && memo ? add_expense(amount, memo) : abort("You must provide an amount and memo.")
+else
+  display_help
+end
+```
+
+> Can you see any potential issues with the Solution code above?
+
+Our code uses string interpolation to build the SQL statement. If we try to add a memo containing an apostrophe (e.g. Hershey's Chocolate), an error arises and we aren't able to add the expense.
