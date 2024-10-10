@@ -88,6 +88,8 @@ expenses=# ALTER TABLE expenses
 > - [x] Iterate through each result row and print it to the screen. The result should look like this:
 
 ```ruby
+#! /usr/bin/env ruby
+
 require 'pg'
 
 connection = PG.connect(dbname: "expenses")
@@ -107,9 +109,53 @@ end
 ## Topic 09: Displaying Help
 
 > Display a list of expenses when passed the list argument, and help content otherwise.
-> Implementation:
-> - [ ] Move the existing expense listing code into a method.
-> - [ ] Add a new method that prints out the help content.
-> - [ ] Check the value of the first argument passed to the program, and call the appropriate method.
+> - [x] Move the existing expense listing code into a method.
+> - [x] Add a new method that prints out the help content.
+> - [x] Check the value of the first argument passed to the program, and call the appropriate method.
 
-For this assignment, we'll need access to the arguments passed into our CLI program. When writing a script, we can access the list of arguments passed into a command-line program with ARGV. In your Ruby script, ARGV will be an Array of arguments that have been passed to your command-line program.
+```ruby
+#! /usr/bin/env ruby
+
+require 'pg'
+
+def list_expenses
+  connection = PG.connect(dbname: "expenses")
+  result = connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+  result.each do |tuple|
+    columns = [ tuple["id"].rjust(3),
+                tuple["created_on"].rjust(10),
+                tuple["amount"].rjust(12),
+                tuple["memo"] ]
+
+    puts columns.join(" | ")
+  end
+end
+
+def display_help
+  puts <<~HELP
+    An expense recording system
+
+    Commands:
+    
+    add AMOUNT MEMO - record a new expense
+    clear - delete all expenses
+    list - list all expenses
+    delete NUMBER - remove expense with id NUMBER
+    search QUERY - list expenses with a matching memo field
+  HELP
+end
+
+cmd = ARGV[0]
+if cmd == "list"
+  list_expenses
+else
+  display_help
+end
+```
+
+> Describe what is happening on line 20 of the Solution shown above.
+
+Line 20 is the beginning of a heredoc (short for "here document") block. A heredoc is a way to define multi-line strings in a more readable way when writing a large block of text. The `<<` operator starts the heredoc, followed by an arbitrary `INDENTIFIER` label and a closing `IDENTIFIER` that must match the opening one. The squiggly heredoc (`<<~`), which we use in the solution, strips leading whitespace from the beginning of each line in the heredoc block. This allows us to indent the content and the closing identifier in a natural, readable way.
+
+The rule for stripping enough whitespace: The indentation of the least-indented line will be removed from each line of the content.
