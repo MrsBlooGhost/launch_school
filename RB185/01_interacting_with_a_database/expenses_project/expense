@@ -1,0 +1,22 @@
+#! /usr/bin/env ruby
+
+require 'pg'
+
+# Create a connection to the database
+connection = PG.connect(dbname: "expenses")
+
+# Execute a query to retrieve all rows from the expenses table, ordered from oldest to newest
+result = connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+# Iterate through each result row and print it to the screen. THe result should look like this:
+result.each do |tuple|
+  columns = [ tuple["id"].rjust(3),
+              tuple["created_on"].rjust(10),
+              tuple["amount"].rjust(12),
+              tuple["memo"]
+            ]
+
+  puts columns.join(" | ")
+end
+
+puts "#{ARGV}"
