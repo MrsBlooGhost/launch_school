@@ -2,6 +2,29 @@
 
 ## Topic 07: Database Design
 
+> Requirements: 
+> - Create a database to store the expenses managed by this project.
+> Implementation:
+> - [x] Design a table called `expenses` that can hold the data for expenses.
+> - [x] This table should have columns named `id`, `amount`, `memo`, and `created_on`.
+> - [x] Write the SQL to create that table into a file called `schema.sql`.
+> - [x] Create a database and use `schema.sql` to setup the database for the application.
+
+```sql
+-- schema.sql
+CREATE TABLE expenses (
+  id SERIAL PRIMARY KEY,
+  amount DECIMAL(6,2) NOT NULL,
+  memo TEXT NOT NULL,
+  created_on DATE NOT NULL
+);
+```
+
+```
+$ createdb expenses
+$ psql -d expenses < schema.sql
+```
+
 > What is the largest value that can be stored in the amount column? Use psql to illustrate what it is.
 
 9999.99
@@ -62,6 +85,7 @@ expenses=# ALTER TABLE expenses
 ## Topic 08: Listing Expenses
 
 > Connect to the `expenses` database and print out the information for all expenses in the system.
+
 
 ```ruby
 require 'pg'
