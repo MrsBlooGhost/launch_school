@@ -430,5 +430,5 @@ class CLI
   end
 end
 
-CLI.new.run(ARGV)
+==CLI.new.run(ARGV)==
 ```
