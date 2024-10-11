@@ -26,6 +26,25 @@ class ExpenseData
 
     @connection.exec_params(sql, [amount, memo, Date.today])
   end
+
+  def search_expenses(query)
+    sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
+    result = @connection.exec_params(sql, ["%#{query}"])
+    display_expenses(result)
+  end
+
+  private
+
+  def display_expenses(expenses)
+    expenses.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+  end
 end
 
 class CLI
@@ -43,6 +62,8 @@ class CLI
       memo = arguments[1]
       abort("You must provide an amount and memo.") unless amount && memo
       @application.add_expense(amount, memo)
+    when "search"
+      @application.search_expenses(arguments[0])
     else
       display_help
     end
