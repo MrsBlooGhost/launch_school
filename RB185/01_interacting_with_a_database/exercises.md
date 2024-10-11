@@ -167,8 +167,8 @@ The rule for stripping enough whitespace: The indentation of the least-indented 
 > 2. Make sure that this command is always passed any additional parameters needed to add an expense. If it isn't display an error message:
 
 > Implementation:
-> - [ ] Check to see if the first argument passed to the program is `add`. If it is, check to make sure that two more arguments were also passed. If they weren't, print out an error message and exit.
-> - [ ] Call a new method, `add_expense`, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the `expenses` table.
+> - [x] Check to see if the first argument passed to the program is `add`. If it is, check to make sure that two more arguments were also passed. If they weren't, print out an error message and exit.
+> - [x] Call a new method, `add_expense`, that accepts the two passed arguments. This method should execute a SQL statement to insert a new row into the `expenses` table.
 
 ```ruby
 #! /usr/bin/env ruby
@@ -225,4 +225,31 @@ end
 
 > Can you see any potential issues with the Solution code above?
 
-Our code uses string interpolation to build the SQL statement. If we try to add a memo containing an apostrophe (e.g. Hershey's Chocolate), an error arises and we aren't able to add the expense.
+Our code uses string interpolation to build the SQL statement. If we try to add a memo containing an apostrophe (e.g. `Hershey's Chocolate`), an error arises and we aren't able to add the expense.
+
+## Topic 11: Handling Parameters Safely
+
+> What happens if you use two placeholders in the first argument to `PG::Connection#exec_params`, but only one in the Array of values used to fill in those placeholders?
+
+A `PG::ProtocolViolation` error will be raised.
+
+```
+irb(main):005> connection.exec_params("SELECT 1 + $1 + $2", [1]).values
+(irb):5:in `exec_params': ERROR:  bind message supplies 1 parameters, but prepared statement "" requires 2 (PG::ProtocolViolation)
+```
+
+> Update the code within the `add_expense` method to use `exec_params` instead of `exec`.
+
+```ruby
+def add_expense(amount, memo)
+  sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
+
+  CONNECTION.exec_params(sql, [amount, memo, Date.today])
+end
+```
+
+> What happens when the same malicious arguments are passed to the program now?
+
+The malicious input is now treated as data, preventing SQL injection.
+
+##

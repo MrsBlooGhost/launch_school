@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby
 
 require 'pg'
+require 'date'
 
 # Adding a constant here allows us to access the connection from within both list_expenses and add_expense. This is a sign that we were missing an object in our design.
 CONNECTION = PG.connect(dbname: "expenses")
@@ -19,9 +20,9 @@ def list_expenses
 end
 
 def add_expense(amount, memo)
-  sql = "INSERT INTO expenses (amount, memo, created_on) VALUES (#{amount}, '#{memo}', CURRENT_DATE)"
+  sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
 
-  CONNECTION.exec(sql)
+  CONNECTION.exec_params(sql, [amount, memo, Date.today])
 end
 
 def display_help
