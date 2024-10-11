@@ -254,12 +254,14 @@ The malicious input is now treated as data, preventing SQL injection.
 
 ## Topic 12: Code Structure
 
-> Update the code so it falls in line with the design described in the above video.
+> Requirements:
+> 1. Update the code so it falls in line with the design described in the above video.
 
+> Implementation:
 > - [x] Move the add_expense and list_expenses methods into a new class, `ExpenseData`.
 > - [x] Change the `CONNECTION` constant to an instance variable. We want to have a clear separation of responsibilities for our application. We want to ensure that access to the database connection is restricted to `ExpenseData`, since we're encapsulating database interaction within `ExpenseData`.
-> - [ ] Move the parameter handling into a new class, `CLI` with an instance method `CLI#run`. Create an instance of `ExpenseData` in CLI#initialize.
-> - [ ] Create a new instance of `CLI` and call `run` on it, passing `ARGV`.
+> - [x] Move the parameter handling into a new class, `CLI` with an instance method `CLI#run`. Create an instance of `ExpenseData` in CLI#initialize.
+> - [x] Create a new instance of `CLI` and call `run` on it, passing `ARGV`.
 
 ```ruby
 #! /usr/bin/env ruby
