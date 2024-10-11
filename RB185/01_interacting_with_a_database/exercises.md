@@ -252,4 +252,82 @@ end
 
 The malicious input is now treated as data, preventing SQL injection.
 
-##
+## Topic 12: Code Structure
+
+> Update the code so it falls in line with the design described in the above video.
+
+> - [x] Move the add_expense and list_expenses methods into a new class, `ExpenseData`.
+> - [x] Change the `CONNECTION` constant to an instance variable. We want to have a clear separation of responsibilities for our application. We want to ensure that access to the database connection is restricted to `ExpenseData`, since we're encapsulating database interaction within `ExpenseData`.
+> - [ ] Move the parameter handling into a new class, `CLI` with an instance method `CLI#run`. Create an instance of `ExpenseData` in CLI#initialize.
+> - [ ] Create a new instance of `CLI` and call `run` on it, passing `ARGV`.
+
+```ruby
+#! /usr/bin/env ruby
+
+require 'pg'
+require 'date'
+
+class ExpenseData
+  def initialize
+    @connection = PG.connect(dbname: "expenses")
+  end
+
+  def list_expenses
+    result = @connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+    result.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+  end
+
+  def add_expense(amount, memo)
+    sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
+
+    @connection.exec_params(sql, [amount, memo, Date.today])
+  end
+end
+
+class CLI
+  def initialize
+    @application = ExpenseData.new
+  end
+
+  def run(arguments)
+    cmd = arguments.shift
+    case cmd
+    when "list"
+      @application.list_expenses
+    when "add"
+      amount = arguments[0]
+      memo = arguments[1]
+      abort("You must provide an amount and memo.") unless amount && memo
+      @application.add_expense(amount, memo)
+    else
+      display_help
+    end
+  end
+
+  def display_help
+    puts <<~HELP
+      An expense recording system
+
+      Commands:
+      
+      add AMOUNT MEMO - record a new expense
+      clear - delete all expenses
+      list - list all expenses
+      delete NUMBER - remove expense with id NUMBER
+      search QUERY - list expenses with a matching memo field
+    HELP
+  end
+end
+
+CLI.new.run(ARGV)
+```
+
+## 
