@@ -552,4 +552,430 @@ end
 
 CLI.new.run(ARGV)
 ```
+
 ## Topic 15: Clearing Expenses
+
+> Requirements:
+> 1. A user can remove all expenses from the system using a new command, `clear`.
+> 2. Before deleting all expenses, the program should prompt the user to verify they wish to continue:
+> 3. If the user presses `n`, then the program should exit without deleting any data:
+> 4. If the user presses `y`, all expenses should be deleted a message should be shown:
+
+> Implementation:
+> - [ ] Add a new method, `delete_all_expenses`, to `ExpenseData`.
+> - [ ] Modify `CLI#run` to handle the new `clear` command. Print a warning message, and wait for the user to press a key.
+> - [ ] If the user presses the `y` key, call the new `delete_all_expenses`.
+> - [ ] If the user presses any other key, abort program execution.
+
+```ruby
+#! /usr/bin/env ruby
+
+require 'pg'
+require 'date'
+require 'io/console'
+
+class ExpenseData
+  def initialize
+    @connection = PG.connect(dbname: "expenses")
+  end
+
+  def list_expenses
+    result = @connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+    result.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+  end
+
+  def add_expense(amount, memo)
+    sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
+
+    @connection.exec_params(sql, [amount, memo, Date.today])
+  end
+
+  def search_expenses(query)
+    sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
+    result = @connection.exec_params(sql, ["%#{query}"])
+    display_expenses(result)
+  end
+
+  def delete_expense(id)
+    sql = "SELECT * FROM expenses WHERE id = $1"
+    result = @connection.exec_params(sql, [id])
+
+    if result.ntuples == 1
+      sql = "DELETE FROM expenses WHERE id = $1"
+      @connection.exec_params(sql, [id])
+
+      puts "The following expense has been deleted:"
+      display_expenses(result)
+    else
+      puts "There is no expense with the id '#{id}'."
+    end
+  end
+
+  def delete_all_expenses
+    @connection.exec_params("DELETE FROM expenses")
+    puts "All expenses have been deleted."
+  end
+
+  private
+
+  def display_expenses(expenses)
+    expenses.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+  end
+end
+
+class CLI
+  def initialize
+    @application = ExpenseData.new
+  end
+
+  def run(arguments)
+    cmd = arguments.shift
+    case cmd
+    when "list"
+      @application.list_expenses
+    when "add"
+      amount = arguments[0]
+      memo = arguments[1]
+      abort("You must provide an amount and memo.") unless amount && memo
+      @application.add_expense(amount, memo)
+    when "search"
+      @application.search_expenses(arguments[0])
+    when "delete"
+      @application.delete_expense(arguments[0])
+    when "clear"
+      puts "This will remove all expenses. Are you sure? (y/n)"
+      response = $stdin.getch
+      response == 'y' ? @application.delete_all_expenses : abort
+    else
+      display_help
+    end
+  end
+
+  def display_help
+    puts <<~HELP
+      An expense recording system
+
+      Commands:
+      
+      add AMOUNT MEMO - record a new expense
+      clear - delete all expenses
+      list - list all expenses
+      delete NUMBER - remove expense with id NUMBER
+      search QUERY - list expenses with a matching memo field
+    HELP
+  end
+end
+
+CLI.new.run(ARGV)
+```
+
+## Topic 16: Counting and Totaling Expenses
+
+> Requirements:
+> 1. The `list` command should display a count of expenses in addition to the total of all expenses:
+> 2. If there is only one expense, the output should use appropriate grammar:
+> 3. Additionally, if there are no expenses (which is much more possible now that we've implemented the `clear` command), an appropriate message should be shown:
+> 4. The same behaviors should be provided by the `search` command:
+
+> Implementation:
+> - [ ] Add a new method, `ExpenseData#display_count`, that takes a single argument. This argument should be a `PG::Result` object. If there are rows in the result object, display the "There are n expenses." message. If not, display the "There are no expenses" message.
+> - [ ] Modify `ExpenseData#display_expenses` to calculate the total amount for all rows and display it after listing each expense.
+
+```ruby
+#! /usr/bin/env ruby
+
+require 'pg'
+require 'date'
+require 'io/console'
+
+class ExpenseData
+  def initialize
+    @connection = PG.connect(dbname: "expenses")
+  end
+
+  def list_expenses
+    result = @connection.exec("SELECT * FROM expenses ORDER BY created_on;")
+
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
+  end
+
+  def add_expense(amount, memo)
+    sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
+
+    @connection.exec_params(sql, [amount, memo, Date.today])
+  end
+
+  def search_expenses(query)
+    sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
+    result = @connection.exec_params(sql, ["%#{query}"])
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
+  end
+
+  def delete_expense(id)
+    sql = "SELECT * FROM expenses WHERE id = $1"
+    result = @connection.exec_params(sql, [id])
+
+    if result.ntuples == 1
+      sql = "DELETE FROM expenses WHERE id = $1"
+      @connection.exec_params(sql, [id])
+
+      puts "The following expense has been deleted:"
+      display_expenses(result)
+    else
+      puts "There is no expense with the id '#{id}'."
+    end
+  end
+
+  def delete_all_expenses
+    @connection.exec_params("DELETE FROM expenses")
+    puts "All expenses have been deleted."
+  end
+
+  private
+
+  def display_expenses(expenses)
+    expenses.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+
+    amount_sum = expenses.field_values("amount").map(&:to_f).inject(:+)
+
+    puts "-" * 50
+    puts "Total #{format('%.2f', amount_sum.to_s).rjust(25)}"
+  end
+
+  def display_count(expenses)
+    count = expenses.ntuples
+
+    if count == 0
+      puts "There are no expenses."
+    elsif count == 1
+      puts "There is 1 expense."
+    else
+      puts "There are #{count} expenses." 
+    end
+  end
+end
+
+class CLI
+  def initialize
+    @application = ExpenseData.new
+  end
+
+  def run(arguments)
+    cmd = arguments.shift
+    case cmd
+    when "list"
+      @application.list_expenses
+    when "add"
+      amount = arguments[0]
+      memo = arguments[1]
+      abort("You must provide an amount and memo.") unless amount && memo
+      @application.add_expense(amount, memo)
+    when "search"
+      @application.search_expenses(arguments[0])
+    when "delete"
+      @application.delete_expense(arguments[0])
+    when "clear"
+      puts "This will remove all expenses. Are you sure? (y/n)"
+      response = $stdin.getch
+      response == 'y' ? @application.delete_all_expenses : abort
+    else
+      display_help
+    end
+  end
+
+  def display_help
+    puts <<~HELP
+      An expense recording system
+
+      Commands:
+      
+      add AMOUNT MEMO - record a new expense
+      clear - delete all expenses
+      list - list all expenses
+      delete NUMBER - remove expense with id NUMBER
+      search QUERY - list expenses with a matching memo field
+    HELP
+  end
+end
+
+CLI.new.run(ARGV)
+```
+
+## Topic 17: Creating the Schema Automatically
+
+> Requirements:
+> 1. When a user runs the `expense` program for the first time, it should automatically create any tables it needs within the `expenses` database (notice there are no errors):
+
+> Implementation:
+> Add a new method, `setup_schema` to `ExpenseData`. Call this method inside `ExpenseData#initialize`.
+> Inside `setup_schema`, use the query described above to see if the `expenses` table already exists. If it doesn't, create it.
+
+```ruby
+#! /usr/bin/env ruby
+
+require "pg"
+require "io/console"
+
+class ExpenseData
+  def initialize
+    @connection = PG.connect(dbname: "expenses")
+    setup_schema
+  end
+
+  def list_expenses
+    result = @connection.exec("SELECT * FROM expenses ORDER BY created_on ASC")
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
+  end
+
+  def add_expense(amount, memo)
+    date = Date.today
+    sql = "INSERT INTO expenses (amount, memo, created_on) VALUES ($1, $2, $3)"
+    @connection.exec_params(sql, [amount, memo, date])
+  end
+
+  def search_expenses(query)
+    sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
+    result = @connection.exec_params(sql, ["%#{query}%"])
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
+  end
+
+  def delete_expense(id)
+    sql = "SELECT * FROM expenses WHERE id = $1"
+    result = @connection.exec_params(sql, [id])
+
+    if result.ntuples == 1
+      sql = "DELETE FROM expenses WHERE id=$1"
+      @connection.exec_params(sql, [id])
+
+      puts "The following expense has been deleted:"
+      display_expenses(result)
+    else
+      puts "There is no expense with the id '#{id}'."
+    end
+  end
+
+  def delete_all_expenses
+    @connection.exec("DELETE FROM expenses")
+    puts "All expenses have been deleted."
+  end
+
+  private
+
+  def display_count(expenses)
+    count = expenses.ntuples
+    if count == 0
+      puts "There are no expenses."
+    else
+      puts "There are #{count} expense#{"s" if count != 1}."
+    end
+  end
+
+  def display_expenses(expenses)
+    expenses.each do |tuple|
+      columns = [ tuple["id"].rjust(3),
+                  tuple["created_on"].rjust(10),
+                  tuple["amount"].rjust(12),
+                  tuple["memo"] ]
+
+      puts columns.join(" | ")
+    end
+
+    puts "-" * 50
+
+    amount_sum = expenses.inject(0) do |sum, tuple|
+      sum + tuple["amount"].to_f
+    end
+
+    puts "Total #{amount_sum.to_s.rjust(25)}"
+  end
+
+  def setup_schema
+    result = @connection.exec <<~SQL
+      SELECT COUNT(*) FROM information_schema.tables
+      WHERE table_schema = 'public' AND table_name = 'expenses';
+    SQL
+
+    if result[0]["count"] == "0"
+      @connection.exec <<~SQL
+        CREATE TABLE expenses (
+          id serial PRIMARY KEY,
+          amount numeric(6,2) NOT NULL CHECK (amount >= 0.01),
+          memo text NOT NULL,
+          created_on date NOT NULL
+        );
+      SQL
+    end
+  end
+end
+
+class CLI
+  def initialize
+    @application = ExpenseData.new
+  end
+
+  def run(arguments)
+    command = arguments.shift
+    case command
+    when "add"
+      amount = arguments[0]
+      memo = arguments[1]
+      abort "You must provide an amount and memo." unless amount && memo
+      @application.add_expense(amount, memo)
+    when "delete"
+      @application.delete_expense(arguments[0])
+    when "clear"
+      puts "This will remove all expenses. Are you sure? (y/n)"
+      response = $stdin.getch
+      @application.delete_all_expenses if response == "y"
+    when "list"
+      @application.list_expenses
+    when "search"
+      @application.search_expenses(arguments[0])
+    else
+      display_help
+    end
+  end
+
+  def display_help
+    puts <<~HELP
+      An expense recording system
+
+      Commands:
+
+      add AMOUNT MEMO - record a new expense
+      clear - delete all expenses
+      list - list all expenses
+      delete NUMBER - remove expense with id NUMBER
+      search QUERY - list expenses with a matching memo field
+    HELP
+  end
+end
+
+CLI.new.run(ARGV)
+```

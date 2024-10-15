@@ -2,23 +2,19 @@
 
 require 'pg'
 require 'date'
+require 'io/console'
 
 class ExpenseData
   def initialize
     @connection = PG.connect(dbname: "expenses")
+    setup_schema
   end
 
   def list_expenses
     result = @connection.exec("SELECT * FROM expenses ORDER BY created_on;")
 
-    result.each do |tuple|
-      columns = [ tuple["id"].rjust(3),
-                  tuple["created_on"].rjust(10),
-                  tuple["amount"].rjust(12),
-                  tuple["memo"] ]
-
-      puts columns.join(" | ")
-    end
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
   end
 
   def add_expense(amount, memo)
@@ -30,7 +26,8 @@ class ExpenseData
   def search_expenses(query)
     sql = "SELECT * FROM expenses WHERE memo ILIKE $1"
     result = @connection.exec_params(sql, ["%#{query}"])
-    display_expenses(result)
+    display_count(result)
+    display_expenses(result) if result.ntuples > 0
   end
 
   def delete_expense(id)
@@ -48,6 +45,11 @@ class ExpenseData
     end
   end
 
+  def delete_all_expenses
+    @connection.exec_params("DELETE FROM expenses")
+    puts "All expenses have been deleted."
+  end
+
   private
 
   def display_expenses(expenses)
@@ -58,6 +60,39 @@ class ExpenseData
                   tuple["memo"] ]
 
       puts columns.join(" | ")
+    end
+
+    amount_sum = expenses.field_values("amount").map(&:to_f).inject(:+)
+
+    puts "-" * 50
+    puts "Total #{format('%.2f', amount_sum.to_s).rjust(25)}"
+  end
+
+  def display_count(expenses)
+    count = expenses.ntuples
+
+    if count == 0
+      puts "There are no expenses."
+    elsif count == 1
+      puts "There is 1 expense."
+    else
+      puts "There are #{count} expenses." 
+    end
+  end
+
+  def setup_schema
+    sql = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'expenses';"
+    result = @connection.exec(sql)
+
+    if result[0]["count"] == "0"
+      @connection.exec <<~SQL
+        CREATE TABLE expenses (
+          id SERIAL PRIMARY KEY,
+          amount DECIMAL(6,2) NOT NULL CHECK (amount > 0),
+          memo TEXT NOT NULL,
+          created_on DATE NOT NULL
+        );
+      SQL
     end
   end
 end
@@ -81,6 +116,10 @@ class CLI
       @application.search_expenses(arguments[0])
     when "delete"
       @application.delete_expense(arguments[0])
+    when "clear"
+      puts "This will remove all expenses. Are you sure? (y/n)"
+      response = $stdin.getch
+      response == 'y' ? @application.delete_all_expenses : abort
     else
       display_help
     end
