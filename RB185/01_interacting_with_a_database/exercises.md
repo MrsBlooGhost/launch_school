@@ -562,10 +562,10 @@ CLI.new.run(ARGV)
 > 4. If the user presses `y`, all expenses should be deleted a message should be shown:
 
 > Implementation:
-> - [ ] Add a new method, `delete_all_expenses`, to `ExpenseData`.
-> - [ ] Modify `CLI#run` to handle the new `clear` command. Print a warning message, and wait for the user to press a key.
-> - [ ] If the user presses the `y` key, call the new `delete_all_expenses`.
-> - [ ] If the user presses any other key, abort program execution.
+> - [x] Add a new method, `delete_all_expenses`, to `ExpenseData`.
+> - [x] Modify `CLI#run` to handle the new `clear` command. Print a warning message, and wait for the user to press a key.
+> - [x] If the user presses the `y` key, call the new `delete_all_expenses`.
+> - [x] If the user presses any other key, abort program execution.
 
 ```ruby
 #! /usr/bin/env ruby
@@ -693,8 +693,8 @@ CLI.new.run(ARGV)
 > 4. The same behaviors should be provided by the `search` command:
 
 > Implementation:
-> - [ ] Add a new method, `ExpenseData#display_count`, that takes a single argument. This argument should be a `PG::Result` object. If there are rows in the result object, display the "There are n expenses." message. If not, display the "There are no expenses" message.
-> - [ ] Modify `ExpenseData#display_expenses` to calculate the total amount for all rows and display it after listing each expense.
+> - [x] Add a new method, `ExpenseData#display_count`, that takes a single argument. This argument should be a `PG::Result` object. If there are rows in the result object, display the "There are n expenses." message. If not, display the "There are no expenses" message.
+> - [x] Modify `ExpenseData#display_expenses` to calculate the total amount for all rows and display it after listing each expense.
 
 ```ruby
 #! /usr/bin/env ruby
@@ -831,8 +831,8 @@ CLI.new.run(ARGV)
 > 1. When a user runs the `expense` program for the first time, it should automatically create any tables it needs within the `expenses` database (notice there are no errors):
 
 > Implementation:
-> Add a new method, `setup_schema` to `ExpenseData`. Call this method inside `ExpenseData#initialize`.
-> Inside `setup_schema`, use the query described above to see if the `expenses` table already exists. If it doesn't, create it.
+> - [x] Add a new method, `setup_schema` to `ExpenseData`. Call this method inside `ExpenseData#initialize`.
+> - [x] Inside `setup_schema`, use the query described above to see if the `expenses` table already exists. If it doesn't, create it.
 
 ```ruby
 #! /usr/bin/env ruby
