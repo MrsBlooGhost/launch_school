@@ -9,18 +9,6 @@ class Transaction
     @amount_paid = 0
   end
 
-  # Exercise 6 version of `prompt_for_payment`
-  # def prompt_for_payment(input: $stdin)
-  #   loop do
-  #     puts "You owe $#{item_cost}.\nHow much are you paying?"
-  #     @amount_paid = input.gets.chomp.to_f # notice that we call gets on that parameter
-  #     break if valid_payment? && sufficient_payment?
-  #     puts 'That is not the correct amount. ' \
-  #          'Please make sure to pay the full cost.'
-  #   end
-  # end
-
-  # Exercise 7 version of `prompt_for_payment`
   def prompt_for_payment(input: $stdin, output: $stdout)
     loop do
       output.puts "You owe $#{item_cost}.\nHow much are you paying?"
