@@ -1,0 +1,13 @@
+source 'https://rubygems.org'
+
+ruby '3.2.2'
+
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'erubis'
+gem 'minitest'
+gem 'minitest-reporters'
+gem 'rack-test'
+gem 'redcarpet'
+gem 'bcrypt'
+gem "rackup", "~> 2.2"
